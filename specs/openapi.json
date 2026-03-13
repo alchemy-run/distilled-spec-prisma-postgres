@@ -3524,6 +3524,290 @@
         "description": "Deletes the connection with the given ID."
       }
     },
+    "/v1/connections/{id}/rotate": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Rotated connection credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(con_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "connection"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "postgres",
+                            "accelerate"
+                          ]
+                        },
+                        "endpoints": {
+                          "type": "object",
+                          "properties": {
+                            "direct": {
+                              "type": "object",
+                              "properties": {
+                                "host": {
+                                  "type": "string"
+                                },
+                                "port": {
+                                  "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "host",
+                                "port",
+                                "connectionString"
+                              ]
+                            },
+                            "pooled": {
+                              "type": "object",
+                              "properties": {
+                                "host": {
+                                  "type": "string"
+                                },
+                                "port": {
+                                  "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "host",
+                                "port",
+                                "connectionString"
+                              ]
+                            },
+                            "accelerate": {
+                              "type": "object",
+                              "properties": {
+                                "host": {
+                                  "type": "string"
+                                },
+                                "port": {
+                                  "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "host",
+                                "port",
+                                "connectionString"
+                              ]
+                            }
+                          }
+                        },
+                        "connectionString": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct.connectionString` or `endpoints.pooled.connectionString` instead."
+                        },
+                        "directConnection": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "host": {
+                              "type": "string"
+                            },
+                            "pass": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "host",
+                            "pass",
+                            "user"
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct` instead."
+                        },
+                        "database": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "url",
+                            "name"
+                          ]
+                        },
+                        "host": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct` instead."
+                        },
+                        "pass": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct.connectionString` or `endpoints.pooled.connectionString` instead."
+                        },
+                        "user": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct.connectionString` or `endpoints.pooled.connectionString` instead."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "name",
+                        "createdAt",
+                        "kind",
+                        "endpoints",
+                        "connectionString",
+                        "database",
+                        "host",
+                        "pass",
+                        "user"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Connection with the given ID was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1ConnectionsByIdRotate",
+        "tags": [
+          "Connections"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "pattern": "^(con_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Rotate connection credentials",
+        "description": "Generates new credentials for the connection with the given ID. Revocation of the previous credentials is best-effort."
+      }
+    },
     "/v1/databases": {
       "get": {
         "responses": {
