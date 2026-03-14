@@ -6643,7 +6643,7 @@
             }
           },
           "422": {
-            "description": "Invalid source type, backup not usable, or target is a default database.",
+            "description": "Invalid source type or backup not usable.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6692,7 +6692,7 @@
           }
         ],
         "summary": "Restore database",
-        "description": "Replaces the data in an existing database from a backup. Connections and credentials are preserved — only the data layer is replaced. Cannot be used on default databases.",
+        "description": "Replaces the data in an existing database from a backup. Connections and credentials are preserved — only the data layer is replaced.",
         "requestBody": {
           "content": {
             "application/json": {
