@@ -4035,6 +4035,62 @@
                               "id",
                               "name"
                             ]
+                          },
+                          "source": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "empty"
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "backup"
+                                  },
+                                  "databaseId": {
+                                    "type": "string"
+                                  },
+                                  "backupId": {
+                                    "type": "string",
+                                    "description": "ID of the backup to restore from"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "databaseId",
+                                  "backupId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "database"
+                                  },
+                                  "databaseId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "databaseId"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           }
                         },
                         "required": [
@@ -4048,7 +4104,8 @@
                           "defaultConnectionId",
                           "connections",
                           "project",
-                          "region"
+                          "region",
+                          "source"
                         ]
                       }
                     },
@@ -4410,6 +4467,62 @@
                             "id",
                             "name"
                           ]
+                        },
+                        "source": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "empty"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "backup"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                },
+                                "backupId": {
+                                  "type": "string",
+                                  "description": "ID of the backup to restore from"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId",
+                                "backupId"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "database"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         }
                       },
                       "required": [
@@ -4423,7 +4536,8 @@
                         "defaultConnectionId",
                         "connections",
                         "project",
-                        "region"
+                        "region",
+                        "source"
                       ]
                     }
                   },
@@ -4608,6 +4722,64 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Whether this is the default database"
+                  },
+                  "source": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "empty"
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "backup"
+                          },
+                          "databaseId": {
+                            "type": "string",
+                            "pattern": "^(db_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                            "description": "ID of the database the backup belongs to"
+                          },
+                          "backupId": {
+                            "type": "string",
+                            "description": "ID of the backup to restore from"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "databaseId",
+                          "backupId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "database"
+                          },
+                          "databaseId": {
+                            "type": "string",
+                            "pattern": "^(db_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                            "description": "ID of the database to clone from"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "databaseId"
+                        ]
+                      }
+                    ],
+                    "description": "Source to create the database from. Omit to create an empty database."
                   }
                 },
                 "required": [
@@ -4844,6 +5016,62 @@
                             "id",
                             "name"
                           ]
+                        },
+                        "source": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "empty"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "backup"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                },
+                                "backupId": {
+                                  "type": "string",
+                                  "description": "ID of the backup to restore from"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId",
+                                "backupId"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "database"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         }
                       },
                       "required": [
@@ -4857,7 +5085,8 @@
                         "defaultConnectionId",
                         "connections",
                         "project",
-                        "region"
+                        "region",
+                        "source"
                       ]
                     }
                   },
@@ -5210,6 +5439,62 @@
                             "id",
                             "name"
                           ]
+                        },
+                        "source": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "empty"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "backup"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                },
+                                "backupId": {
+                                  "type": "string",
+                                  "description": "ID of the backup to restore from"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId",
+                                "backupId"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "database"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         }
                       },
                       "required": [
@@ -5223,7 +5508,8 @@
                         "defaultConnectionId",
                         "connections",
                         "project",
-                        "region"
+                        "region",
+                        "source"
                       ]
                     }
                   },
@@ -6691,8 +6977,8 @@
             "required": true
           }
         ],
-        "summary": "Restore database",
-        "description": "Replaces the data in an existing database from a backup. Connections and credentials are preserved — only the data layer is replaced.",
+        "summary": "Restore database (destructive)",
+        "description": "⚠️ **Destructive operation** — this immediately and irreversibly overwrites all data in the target database with the contents of the specified backup. Any data written since the backup was taken will be lost. Ensure you have a recent backup of the target database before proceeding.\n\nReplaces the data in an existing database from a backup. Connections and credentials are preserved — only the data layer is replaced.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -7406,6 +7692,62 @@
                                 "name"
                               ]
                             },
+                            "source": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "const": "empty"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "const": "backup"
+                                    },
+                                    "databaseId": {
+                                      "type": "string"
+                                    },
+                                    "backupId": {
+                                      "type": "string",
+                                      "description": "ID of the backup to restore from"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "databaseId",
+                                    "backupId"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "const": "database"
+                                    },
+                                    "databaseId": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "databaseId"
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
                             "apiKeys": {
                               "type": "array",
                               "items": {
@@ -7575,6 +7917,7 @@
                             "defaultConnectionId",
                             "connections",
                             "region",
+                            "source",
                             "apiKeys",
                             "connectionString",
                             "directConnection"
@@ -7652,7 +7995,8 @@
                     "default": true
                   },
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "region": {
                     "type": "string",
@@ -9135,6 +9479,62 @@
                               "id",
                               "name"
                             ]
+                          },
+                          "source": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "empty"
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "backup"
+                                  },
+                                  "databaseId": {
+                                    "type": "string"
+                                  },
+                                  "backupId": {
+                                    "type": "string",
+                                    "description": "ID of the backup to restore from"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "databaseId",
+                                  "backupId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "database"
+                                  },
+                                  "databaseId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "databaseId"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           }
                         },
                         "required": [
@@ -9148,7 +9548,8 @@
                           "defaultConnectionId",
                           "connections",
                           "project",
-                          "region"
+                          "region",
+                          "source"
                         ]
                       }
                     },
@@ -9515,6 +9916,62 @@
                             "name"
                           ]
                         },
+                        "source": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "empty"
+                                }
+                              },
+                              "required": [
+                                "type"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "backup"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                },
+                                "backupId": {
+                                  "type": "string",
+                                  "description": "ID of the backup to restore from"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId",
+                                "backupId"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "database"
+                                },
+                                "databaseId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "databaseId"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
                         "apiKeys": {
                           "type": "array",
                           "items": {
@@ -9685,6 +10142,7 @@
                         "connections",
                         "project",
                         "region",
+                        "source",
                         "apiKeys",
                         "connectionString",
                         "directConnection"
@@ -9835,7 +10293,8 @@
                     "default": "us-east-1"
                   },
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "isDefault": {
                     "type": "boolean",
@@ -9855,6 +10314,65 @@
                     },
                     "required": [
                       "id"
+                    ],
+                    "deprecated": true,
+                    "description": "Deprecated: use `source` instead."
+                  },
+                  "source": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "empty"
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "backup"
+                          },
+                          "databaseId": {
+                            "type": "string",
+                            "pattern": "^(db_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                            "description": "ID of the database the backup belongs to"
+                          },
+                          "backupId": {
+                            "type": "string",
+                            "description": "ID of the backup to restore from"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "databaseId",
+                          "backupId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "database"
+                          },
+                          "databaseId": {
+                            "type": "string",
+                            "pattern": "^(db_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                            "description": "ID of the database to clone from"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "databaseId"
+                        ]
+                      }
                     ]
                   }
                 }
