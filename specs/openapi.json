@@ -677,6 +677,14 @@
                             "type": "string"
                           }
                         },
+                        "portMapping": {
+                          "type": "object",
+                          "properties": {
+                            "http": {
+                              "type": "number"
+                            }
+                          }
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -12004,6 +12012,14 @@
                           "type": "object",
                           "additionalProperties": {
                             "type": "string"
+                          }
+                        },
+                        "portMapping": {
+                          "type": "object",
+                          "properties": {
+                            "http": {
+                              "type": "number"
+                            }
                           }
                         },
                         "createdAt": {
