@@ -2974,11 +2974,15 @@
                                 },
                                 "port": {
                                   "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "host",
-                                "port"
+                                "port",
+                                "connectionString"
                               ]
                             },
                             "pooled": {
@@ -2989,11 +2993,15 @@
                                 },
                                 "port": {
                                   "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "host",
-                                "port"
+                                "port",
+                                "connectionString"
                               ]
                             },
                             "accelerate": {
@@ -3004,11 +3012,15 @@
                                 },
                                 "port": {
                                   "type": "number"
+                                },
+                                "connectionString": {
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "host",
-                                "port"
+                                "port",
+                                "connectionString"
                               ]
                             }
                           }
@@ -3066,19 +3078,25 @@
                           "type": [
                             "string",
                             "null"
-                          ]
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct` instead."
                         },
                         "pass": {
                           "type": [
                             "string",
                             "null"
-                          ]
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct.connectionString` or `endpoints.pooled.connectionString` instead."
                         },
                         "user": {
                           "type": [
                             "string",
                             "null"
-                          ]
+                          ],
+                          "deprecated": true,
+                          "description": "Deprecated: use `endpoints.direct.connectionString` or `endpoints.pooled.connectionString` instead."
                         }
                       },
                       "required": [
@@ -4342,6 +4360,9 @@
                                       },
                                       "port": {
                                         "type": "number"
+                                      },
+                                      "connectionString": {
+                                        "type": "string"
                                       }
                                     },
                                     "required": [
@@ -4357,6 +4378,9 @@
                                       },
                                       "port": {
                                         "type": "number"
+                                      },
+                                      "connectionString": {
+                                        "type": "string"
                                       }
                                     },
                                     "required": [
@@ -4372,6 +4396,9 @@
                                       },
                                       "port": {
                                         "type": "number"
+                                      },
+                                      "connectionString": {
+                                        "type": "string"
                                       }
                                     },
                                     "required": [
