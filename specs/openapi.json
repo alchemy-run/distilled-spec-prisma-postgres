@@ -132,6 +132,9 @@
                               "null"
                             ]
                           },
+                          "serviceEndpointDomain": {
+                            "type": "string"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -145,6 +148,7 @@
                           "region",
                           "projectId",
                           "latestVersionId",
+                          "serviceEndpointDomain",
                           "createdAt"
                         ]
                       }
@@ -399,6 +403,9 @@
                             "null"
                           ]
                         },
+                        "serviceEndpointDomain": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -412,6 +419,7 @@
                         "region",
                         "projectId",
                         "latestVersionId",
+                        "serviceEndpointDomain",
                         "createdAt"
                       ]
                     }
@@ -1509,6 +1517,9 @@
                             "null"
                           ]
                         },
+                        "serviceEndpointDomain": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -1522,6 +1533,7 @@
                         "region",
                         "projectId",
                         "latestVersionId",
+                        "serviceEndpointDomain",
                         "createdAt"
                       ]
                     }
@@ -1735,6 +1747,9 @@
                             "null"
                           ]
                         },
+                        "serviceEndpointDomain": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -1748,6 +1763,7 @@
                         "region",
                         "projectId",
                         "latestVersionId",
+                        "serviceEndpointDomain",
                         "createdAt"
                       ]
                     }
@@ -2152,6 +2168,272 @@
         "summary": "Delete compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nDeletes a compute service. All compute versions under the service must already be stopped or deleted.",
         "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/compute-services/{computeServiceId}/promote": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Version promoted to service endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "serviceEndpointDomain": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "serviceEndpointDomain"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compute service or version not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The compute version is not running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. malformed compute service ID or missing version ID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1Compute-servicesByComputeServiceIdPromote",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "computeServiceId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Promote compute version",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a compute version to be the active version behind the service's stable endpoint. The version must be running. Returns the service endpoint domain.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  }
+                },
+                "required": [
+                  "versionId"
+                ]
+              }
+            }
+          }
+        }
       }
     },
     "/v1/compute-services/{computeServiceId}/versions": {
@@ -8745,6 +9027,9 @@
                               "null"
                             ]
                           },
+                          "serviceEndpointDomain": {
+                            "type": "string"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -8758,6 +9043,7 @@
                           "region",
                           "projectId",
                           "latestVersionId",
+                          "serviceEndpointDomain",
                           "createdAt"
                         ]
                       }
@@ -9046,6 +9332,9 @@
                             "null"
                           ]
                         },
+                        "serviceEndpointDomain": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -9059,6 +9348,7 @@
                         "region",
                         "projectId",
                         "latestVersionId",
+                        "serviceEndpointDomain",
                         "createdAt"
                       ]
                     }
