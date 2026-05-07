@@ -79,6 +79,1056 @@
     "schemas": {}
   },
   "paths": {
+    "/v1/projects/{projectId}/branches": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created the Branch.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "branch"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "gitName": {
+                          "type": "string"
+                        },
+                        "isDefault": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "project": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "url",
+                            "name"
+                          ],
+                          "description": "Thin reference to the parent Project. Member resources are intentionally NOT inlined — list /v1/databases?branchId=<br_xxx> or /v1/compute-services?branchId=<br_xxx> instead (see API design principles \"Flat and Hierarchical Coexistence\")."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "gitName",
+                        "isDefault",
+                        "createdAt",
+                        "updatedAt",
+                        "project"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found, or actor lacks venus access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A live Branch with the same gitName already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid gitName.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1ProjectsByProjectIdBranches",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "projectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Create a branch",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a Branch under the specified Project. The first Branch in a Project is always created with isDefault=true regardless of the body value (FR4 first-Branch-is-default rule). Setting isDefault=true while another Branch already holds the default atomically swaps the flag.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gitName": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "gitName"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returned the list of Branches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "type": {
+                            "type": "string",
+                            "const": "branch"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "gitName": {
+                            "type": "string"
+                          },
+                          "isDefault": {
+                            "type": "boolean"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "project": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "url",
+                              "name"
+                            ],
+                            "description": "Thin reference to the parent Project. Member resources are intentionally NOT inlined — list /v1/databases?branchId=<br_xxx> or /v1/compute-services?branchId=<br_xxx> instead (see API design principles \"Flat and Hierarchical Coexistence\")."
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "url",
+                          "gitName",
+                          "isDefault",
+                          "createdAt",
+                          "updatedAt",
+                          "project"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "hasMore": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "nextCursor",
+                        "hasMore"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found, or actor lacks venus access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Mutually exclusive filters specified together.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1ProjectsByProjectIdBranches",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "projectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Cursor for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 100,
+              "description": "Limit for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "gitName",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "gitNameContains",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "summary": "List branches in a project",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns the live Branches of a Project. Supports two mutually exclusive filters: ?gitName= (exact match — at most one row), ?gitNameContains= (case-sensitive substring). Soft-deleted Branches are not returned. Ordered by createdAt ascending.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/branches/{branchId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returned the Branch.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "branch"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "gitName": {
+                          "type": "string"
+                        },
+                        "isDefault": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "project": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "url",
+                            "name"
+                          ],
+                          "description": "Thin reference to the parent Project. Member resources are intentionally NOT inlined — list /v1/databases?branchId=<br_xxx> or /v1/compute-services?branchId=<br_xxx> instead (see API design principles \"Flat and Hierarchical Coexistence\")."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "gitName",
+                        "isDefault",
+                        "createdAt",
+                        "updatedAt",
+                        "project"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found, or actor lacks venus access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1BranchesByBranchId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "branchId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get a branch",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a single Branch by ID. Member resources are not inlined — list them via /v1/databases?branchId= and /v1/compute-services?branchId=.",
+        "x-prisma-stability": "experimental"
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "Branch updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "branch"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "gitName": {
+                          "type": "string"
+                        },
+                        "isDefault": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "project": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "url",
+                            "name"
+                          ],
+                          "description": "Thin reference to the parent Project. Member resources are intentionally NOT inlined — list /v1/databases?branchId=<br_xxx> or /v1/compute-services?branchId=<br_xxx> instead (see API design principles \"Flat and Hierarchical Coexistence\")."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "gitName",
+                        "isDefault",
+                        "createdAt",
+                        "updatedAt",
+                        "project"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found, or actor lacks venus access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "gitName rename, demote-default, or unknown field rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "patchV1BranchesByBranchId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "branchId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Update a branch",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a Branch to be the Project's default. Only isDefault is mutable — gitName rename is rejected (FR13 — gitName is a stable, externally-typed identifier).",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isDefault": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Branch soft-deleted."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found, or actor lacks venus access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Branch still has live member resources.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Branch is the Project's current default.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "deleteV1BranchesByBranchId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "branchId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Soft-delete a branch",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nSoft-deletes a Branch (sets deletedAt). Refuses if the Branch is the Project's current default (FR4) or has live members (FR3).",
+        "x-prisma-stability": "experimental"
+      }
+    },
     "/v1/compute-services/versions/{versionId}/logs": {
       "get": {
         "responses": {
@@ -346,6 +1396,12 @@
                           "projectId": {
                             "type": "string"
                           },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
                           "latestVersionId": {
                             "type": [
                               "string",
@@ -367,6 +1423,7 @@
                           "name",
                           "region",
                           "projectId",
+                          "branchId",
                           "latestVersionId",
                           "serviceEndpointDomain",
                           "createdAt"
@@ -567,6 +1624,30 @@
               "type": "string",
               "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
             }
+          },
+          {
+            "in": "query",
+            "name": "branchId",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "unassigned"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                }
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchGitName",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         ],
         "summary": "List compute services",
@@ -617,6 +1698,12 @@
                         "projectId": {
                           "type": "string"
                         },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "latestVersionId": {
                           "type": [
                             "string",
@@ -638,6 +1725,7 @@
                         "name",
                         "region",
                         "projectId",
+                        "branchId",
                         "latestVersionId",
                         "serviceEndpointDomain",
                         "createdAt"
@@ -847,6 +1935,20 @@
                       "ap-southeast-1"
                     ],
                     "default": "us-east-1"
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
                   },
                   "projectId": {
                     "type": "string",
@@ -1731,6 +2833,12 @@
                         "projectId": {
                           "type": "string"
                         },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "latestVersionId": {
                           "type": [
                             "string",
@@ -1752,6 +2860,7 @@
                         "name",
                         "region",
                         "projectId",
+                        "branchId",
                         "latestVersionId",
                         "serviceEndpointDomain",
                         "createdAt"
@@ -1961,6 +3070,12 @@
                         "projectId": {
                           "type": "string"
                         },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "latestVersionId": {
                           "type": [
                             "string",
@@ -1982,6 +3097,7 @@
                         "name",
                         "region",
                         "projectId",
+                        "branchId",
                         "latestVersionId",
                         "serviceEndpointDomain",
                         "createdAt"
@@ -2189,11 +3305,22 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 256
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
                   }
-                },
-                "required": [
-                  "displayName"
-                ]
+                }
               }
             }
           }
@@ -4619,6 +5746,12 @@
                                 "type": "null"
                               }
                             ]
+                          },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           }
                         },
                         "required": [
@@ -4633,7 +5766,8 @@
                           "connections",
                           "project",
                           "region",
-                          "source"
+                          "source",
+                          "branchId"
                         ]
                       }
                     },
@@ -4765,6 +5899,30 @@
               "type": "string",
               "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
               "description": "Filter databases by project ID"
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchId",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "unassigned"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                }
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchGitName",
+            "schema": {
+              "type": "string",
+              "minLength": 1
             }
           }
         ],
@@ -5060,6 +6218,12 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5074,7 +6238,8 @@
                         "connections",
                         "project",
                         "region",
-                        "source"
+                        "source",
+                        "branchId"
                       ]
                     }
                   },
@@ -5317,6 +6482,20 @@
                       }
                     ],
                     "description": "Source to create the database from. Omit to create an empty database."
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
                   }
                 },
                 "required": [
@@ -5609,6 +6788,12 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5623,7 +6808,8 @@
                         "connections",
                         "project",
                         "region",
-                        "source"
+                        "source",
+                        "branchId"
                       ]
                     }
                   },
@@ -6032,6 +7218,12 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6046,7 +7238,8 @@
                         "connections",
                         "project",
                         "region",
-                        "source"
+                        "source",
+                        "branchId"
                       ]
                     }
                   },
@@ -6184,6 +7377,20 @@
                     "type": "string",
                     "minLength": 1,
                     "description": "New display name for the database"
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
                   }
                 }
               }
@@ -7341,6 +8548,12 @@
                             "databaseId",
                             "backupId"
                           ]
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7355,7 +8568,8 @@
                         "connections",
                         "project",
                         "region",
-                        "source"
+                        "source",
+                        "branchId"
                       ]
                     }
                   },
@@ -8285,6 +9499,12 @@
                                 }
                               ]
                             },
+                            "branchId": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
                             "apiKeys": {
                               "type": "array",
                               "items": {
@@ -8455,6 +9675,7 @@
                             "connections",
                             "region",
                             "source",
+                            "branchId",
                             "apiKeys",
                             "connectionString",
                             "directConnection"
@@ -9241,6 +10462,12 @@
                           "projectId": {
                             "type": "string"
                           },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
                           "latestVersionId": {
                             "type": [
                               "string",
@@ -9262,6 +10489,7 @@
                           "name",
                           "region",
                           "projectId",
+                          "branchId",
                           "latestVersionId",
                           "serviceEndpointDomain",
                           "createdAt"
@@ -9546,6 +10774,12 @@
                         "projectId": {
                           "type": "string"
                         },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "latestVersionId": {
                           "type": [
                             "string",
@@ -9567,6 +10801,7 @@
                         "name",
                         "region",
                         "projectId",
+                        "branchId",
                         "latestVersionId",
                         "serviceEndpointDomain",
                         "createdAt"
@@ -9786,6 +11021,20 @@
                       "ap-southeast-1"
                     ],
                     "default": "us-east-1"
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
                   }
                 },
                 "required": [
@@ -10080,6 +11329,12 @@
                                 "type": "null"
                               }
                             ]
+                          },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           }
                         },
                         "required": [
@@ -10094,7 +11349,8 @@
                           "connections",
                           "project",
                           "region",
-                          "source"
+                          "source",
+                          "branchId"
                         ]
                       }
                     },
@@ -10517,6 +11773,12 @@
                             }
                           ]
                         },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "apiKeys": {
                           "type": "array",
                           "items": {
@@ -10688,6 +11950,7 @@
                         "project",
                         "region",
                         "source",
+                        "branchId",
                         "apiKeys",
                         "connectionString",
                         "directConnection"
