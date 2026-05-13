@@ -14362,6 +14362,784 @@
         "description": "Returns all available regions for Prisma Accelerate."
       }
     },
+    "/v1/source-repositories": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Source repository linked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(srcrepo_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "source-repository"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "repoId": {
+                          "type": "integer"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "github"
+                          ]
+                        },
+                        "repoFullName": {
+                          "type": "string"
+                        },
+                        "defaultBranch": {
+                          "type": "string"
+                        },
+                        "isPrivate": {
+                          "type": "boolean"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "archived"
+                          ]
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "installationId": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "repoId",
+                        "provider",
+                        "repoFullName",
+                        "defaultBranch",
+                        "isPrivate",
+                        "status",
+                        "projectId",
+                        "installationId",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "SCM installation is suspended, uninstalled, or actor lacks access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project or SCM installation not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Repository or project already linked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Repository not accessible to the installation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1Source-repositories",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [],
+        "summary": "Link a source repository to a project",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nLinks a GitHub repository to a Prisma project via an existing SCM installation.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "const": "github"
+                  },
+                  "providerRepositoryId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "required": [
+                  "projectId",
+                  "provider",
+                  "providerRepositoryId"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returned the list of source repositories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "pattern": "^(srcrepo_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "type": {
+                            "type": "string",
+                            "const": "source-repository"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "repoId": {
+                            "type": "integer"
+                          },
+                          "provider": {
+                            "type": "string",
+                            "enum": [
+                              "github"
+                            ]
+                          },
+                          "repoFullName": {
+                            "type": "string"
+                          },
+                          "defaultBranch": {
+                            "type": "string"
+                          },
+                          "isPrivate": {
+                            "type": "boolean"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ]
+                          },
+                          "projectId": {
+                            "type": "string"
+                          },
+                          "installationId": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "url",
+                          "repoId",
+                          "provider",
+                          "repoFullName",
+                          "defaultBranch",
+                          "isPrivate",
+                          "status",
+                          "projectId",
+                          "installationId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "hasMore": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "nextCursor",
+                        "hasMore"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1Source-repositories",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Cursor for pagination"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 100,
+              "description": "Limit for pagination"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "projectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "List source repositories",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns source repositories linked to a project. Requires projectId query parameter.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/source-repositories/{id}": {
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Source repository unlinked."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Source repository not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "deleteV1Source-repositoriesById",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "pattern": "^(srcrepo_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Unlink a source repository",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nArchives the source repository link and soft-deletes SCM-managed branches.",
+        "x-prisma-stability": "experimental"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returned the source repository.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(srcrepo_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "source-repository"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "repoId": {
+                          "type": "integer"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "github"
+                          ]
+                        },
+                        "repoFullName": {
+                          "type": "string"
+                        },
+                        "defaultBranch": {
+                          "type": "string"
+                        },
+                        "isPrivate": {
+                          "type": "boolean"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "archived"
+                          ]
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "installationId": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "repoId",
+                        "provider",
+                        "repoFullName",
+                        "defaultBranch",
+                        "isPrivate",
+                        "status",
+                        "projectId",
+                        "installationId",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Source repository not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1Source-repositoriesById",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "pattern": "^(srcrepo_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get a source repository",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a single source repository link by ID.",
+        "x-prisma-stability": "experimental"
+      }
+    },
     "/v1/versions": {
       "get": {
         "responses": {
