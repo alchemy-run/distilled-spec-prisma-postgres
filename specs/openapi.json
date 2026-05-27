@@ -4411,6 +4411,36 @@
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time"
+                          },
+                          "dnsRecords": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "CNAME"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                },
+                                "ttl": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "name",
+                                "value",
+                                "ttl"
+                              ]
+                            }
                           }
                         },
                         "required": [
@@ -4425,7 +4455,8 @@
                           "failureCategory",
                           "certExpiresAt",
                           "createdAt",
-                          "updatedAt"
+                          "updatedAt",
+                          "dnsRecords"
                         ]
                       }
                     },
@@ -4608,6 +4639,137 @@
       },
       "post": {
         "responses": {
+          "200": {
+            "description": "Custom domain already registered on this compute service.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "custom-domain"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "hostname": {
+                          "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "pending_dns",
+                            "verifying",
+                            "verified_routing_blocked",
+                            "provisioning_tls",
+                            "active",
+                            "failed",
+                            "removing"
+                          ]
+                        },
+                        "foundryStatus": {
+                          "type": "string"
+                        },
+                        "failureReason": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failureCategory": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "dns",
+                            "acme",
+                            "storage",
+                            "unknown",
+                            null
+                          ]
+                        },
+                        "certExpiresAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "hostname",
+                        "computeServiceId",
+                        "status",
+                        "foundryStatus",
+                        "failureReason",
+                        "failureCategory",
+                        "certExpiresAt",
+                        "createdAt",
+                        "updatedAt",
+                        "dnsRecords"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
           "201": {
             "description": "Custom domain created.",
             "content": {
@@ -4683,6 +4845,36 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -4697,7 +4889,8 @@
                         "failureCategory",
                         "certExpiresAt",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "dnsRecords"
                       ]
                     }
                   },
@@ -5058,6 +5251,36 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -5072,7 +5295,8 @@
                         "failureCategory",
                         "certExpiresAt",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "dnsRecords"
                       ]
                     }
                   },
@@ -5471,6 +5695,36 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -5485,7 +5739,8 @@
                         "failureCategory",
                         "certExpiresAt",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "dnsRecords"
                       ]
                     }
                   },
