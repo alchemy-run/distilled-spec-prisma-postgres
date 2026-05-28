@@ -14076,7 +14076,7 @@
         ],
         "parameters": [],
         "summary": "Create an environment variable",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new environment variable in a project's `production` or `preview` environment. Returns 409 if a variable with the same key already exists in that environment — use PATCH to replace its value. Values are stored encrypted and are not returned by subsequent reads.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new environment variable in a project's `production` or `preview` environment, or a preview branch override when `branchId` is supplied. Returns 409 if a variable with the same key already exists in that scope — use PATCH to replace its value. Values are stored encrypted and are not returned by subsequent reads.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -14087,6 +14087,10 @@
                   "projectId": {
                     "type": "string",
                     "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchId": {
+                    "type": "string",
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
                   },
                   "class": {
                     "type": "string",
@@ -15383,6 +15387,153 @@
         ],
         "summary": "Delete integration",
         "description": "Revokes the integration tokens by integration ID."
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Current authenticated principal retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^(usr_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email"
+                            },
+                            "name": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "email",
+                            "name"
+                          ]
+                        },
+                        "workspace": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "pattern": "^(wksp_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "credential": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "oauth",
+                                "service_token",
+                                "management_token"
+                              ]
+                            },
+                            "id": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "name": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "id",
+                            "name"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "user",
+                        "workspace",
+                        "credential"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1Me",
+        "tags": [
+          "Misc"
+        ],
+        "parameters": [],
+        "summary": "Get current authenticated principal",
+        "description": "Returns the user, workspace, and credential represented by the current token."
       }
     },
     "/v1/workspaces/{workspaceId}/integrations": {
