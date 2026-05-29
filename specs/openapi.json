@@ -5450,7 +5450,7 @@
             "name": "domainId",
             "schema": {
               "type": "string",
-              "pattern": "^(dom_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+              "pattern": "^(dom_)?[A-Za-z0-9]+$"
             },
             "required": true
           }
@@ -5607,7 +5607,7 @@
             "name": "domainId",
             "schema": {
               "type": "string",
-              "pattern": "^(dom_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+              "pattern": "^(dom_)?[A-Za-z0-9]+$"
             },
             "required": true
           }
@@ -5927,7 +5927,7 @@
             "name": "domainId",
             "schema": {
               "type": "string",
-              "pattern": "^(dom_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+              "pattern": "^(dom_)?[A-Za-z0-9]+$"
             },
             "required": true
           }
