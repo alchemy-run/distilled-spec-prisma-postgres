@@ -110,6 +110,13 @@
                         "isDefault": {
                           "type": "boolean"
                         },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "production",
+                            "preview"
+                          ]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -146,6 +153,7 @@
                         "url",
                         "gitName",
                         "isDefault",
+                        "role",
                         "createdAt",
                         "updatedAt",
                         "project"
@@ -308,7 +316,7 @@
           }
         ],
         "summary": "Create a branch",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a Branch under the specified Project. The first Branch in a Project is always created with isDefault=true regardless of the body value (FR4 first-Branch-is-default rule). Setting isDefault=true while another Branch already holds the default atomically swaps the flag.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a Branch under the specified Project. The first Branch in a Project is always created with isDefault=true and role=production regardless of the body value. Later Branches are created with role=preview. Setting isDefault=true while another Branch already holds the default atomically swaps the default flag only.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -326,7 +334,8 @@
                 },
                 "required": [
                   "gitName"
-                ]
+                ],
+                "additionalProperties": false
               }
             }
           }
@@ -364,6 +373,13 @@
                           "isDefault": {
                             "type": "boolean"
                           },
+                          "role": {
+                            "type": "string",
+                            "enum": [
+                              "production",
+                              "preview"
+                            ]
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -400,6 +416,7 @@
                           "url",
                           "gitName",
                           "isDefault",
+                          "role",
                           "createdAt",
                           "updatedAt",
                           "project"
@@ -620,6 +637,13 @@
                         "isDefault": {
                           "type": "boolean"
                         },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "production",
+                            "preview"
+                          ]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -656,6 +680,7 @@
                         "url",
                         "gitName",
                         "isDefault",
+                        "role",
                         "createdAt",
                         "updatedAt",
                         "project"
@@ -785,6 +810,13 @@
                         "isDefault": {
                           "type": "boolean"
                         },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "production",
+                            "preview"
+                          ]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -821,6 +853,7 @@
                         "url",
                         "gitName",
                         "isDefault",
+                        "role",
                         "createdAt",
                         "updatedAt",
                         "project"
@@ -901,7 +934,7 @@
             }
           },
           "422": {
-            "description": "gitName rename, demote-default, or unknown field rejected.",
+            "description": "gitName rename, role change, demote-default, or unknown field rejected.",
             "content": {
               "application/json": {
                 "schema": {
@@ -950,7 +983,7 @@
           }
         ],
         "summary": "Update a branch",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a Branch to be the Project's default. Only isDefault is mutable — gitName rename is rejected (FR13 — gitName is a stable, externally-typed identifier).",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a Branch to be the Project's default. Only isDefault is mutable — gitName rename and role changes are rejected.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -1076,7 +1109,7 @@
             }
           },
           "422": {
-            "description": "Branch is the Project's current default.",
+            "description": "Branch is the Project's current default or production Branch.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1125,7 +1158,7 @@
           }
         ],
         "summary": "Soft-delete a branch",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nSoft-deletes a Branch (sets deletedAt). Refuses if the Branch is the Project's current default (FR4) or has live members (FR3).",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nSoft-deletes a Branch (sets deletedAt). Refuses if the Branch is the Project's current default, the Project's production Branch, or has live members.",
         "x-prisma-stability": "experimental"
       }
     },
@@ -4295,7 +4328,7 @@
           }
         ],
         "summary": "Create compute version",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the latest version's artifact). Environment variables are resolved automatically from the service's attached Branch (production-class templates for the default Branch; preview-class templates for all other Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the latest version's artifact). Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates for preview Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -18067,7 +18100,7 @@
         ],
         "parameters": [],
         "summary": "Create compute version",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. The `computeServiceId` is required in the request body. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set. Environment variables are resolved automatically from the service's attached Branch (the project's production-class template for the default Branch; the preview-class template merged with branch overrides otherwise) — clients write env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. The `computeServiceId` is required in the request body. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set. Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates merged with branch overrides for preview Branches) — clients write env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
