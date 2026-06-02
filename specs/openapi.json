@@ -3056,7 +3056,7 @@
           }
         ],
         "summary": "Get compute service",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a compute service by ID, including its region and latest version reference.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a compute service by ID, including its region and active promoted version reference.",
         "x-prisma-stability": "experimental"
       },
       "patch": {
@@ -4213,7 +4213,7 @@
             }
           },
           "422": {
-            "description": "Validation failed (e.g. `skipCodeUpload` on the first version, or the compute service is not attached to a Branch — env-var resolution requires a Branch).",
+            "description": "Validation failed (e.g. `skipCodeUpload` without an active promoted version, or the compute service is not attached to a Branch — env-var resolution requires a Branch).",
             "content": {
               "application/json": {
                 "schema": {
@@ -4328,7 +4328,7 @@
           }
         ],
         "summary": "Create compute version",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the latest version's artifact). Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates for preview Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the active promoted version's artifact). Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates for preview Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -17995,7 +17995,7 @@
             }
           },
           "422": {
-            "description": "Validation failed (e.g. missing `computeServiceId`, `skipCodeUpload` on the first version, missing workspace context, or the compute service is not attached to a Branch — env-var resolution requires a Branch).",
+            "description": "Validation failed (e.g. missing `computeServiceId`, `skipCodeUpload` without an active promoted version, missing workspace context, or the compute service is not attached to a Branch — env-var resolution requires a Branch).",
             "content": {
               "application/json": {
                 "schema": {
@@ -18100,7 +18100,7 @@
         ],
         "parameters": [],
         "summary": "Create compute version",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. The `computeServiceId` is required in the request body. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set. Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates merged with branch overrides for preview Branches) — clients write env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. The `computeServiceId` is required in the request body. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set, in which case the active promoted version's artifact is forked. Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates merged with branch overrides for preview Branches) — clients write env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
