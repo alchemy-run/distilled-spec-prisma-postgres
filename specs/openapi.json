@@ -2037,8 +2037,11 @@
                         "envVars": {
                           "type": "object",
                           "additionalProperties": {
-                            "type": "string"
-                          }
+                            "type": "string",
+                            "description": "Always \"[redacted]\". Compute version inspection endpoints expose env var names only; values are never returned.",
+                            "example": "[redacted]"
+                          },
+                          "description": "Environment variable names present on this compute version. Values are always redacted as \"[redacted]\" and must not be treated as deployed secret values."
                         },
                         "portMapping": {
                           "type": "object",
@@ -3464,7 +3467,7 @@
             }
           },
           "409": {
-            "description": "The compute service has active versions that must be stopped first.",
+            "description": "A compute version could not be deleted, or a concurrent version was created while deleting the service.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3546,7 +3549,7 @@
           }
         ],
         "summary": "Delete compute service",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nDeletes a compute service. All compute versions under the service must already be stopped or deleted.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nDeletes a compute service. Compute versions under the service are deleted before the service is deleted.",
         "x-prisma-stability": "experimental"
       }
     },
@@ -18182,8 +18185,11 @@
                         "envVars": {
                           "type": "object",
                           "additionalProperties": {
-                            "type": "string"
-                          }
+                            "type": "string",
+                            "description": "Always \"[redacted]\". Compute version inspection endpoints expose env var names only; values are never returned.",
+                            "example": "[redacted]"
+                          },
+                          "description": "Environment variable names present on this compute version. Values are always redacted as \"[redacted]\" and must not be treated as deployed secret values."
                         },
                         "portMapping": {
                           "type": "object",
