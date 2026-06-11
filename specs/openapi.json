@@ -201,7 +201,7 @@
             }
           },
           "404": {
-            "description": "Project not found, or actor lacks venus access.",
+            "description": "Project not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -484,7 +484,7 @@
             }
           },
           "404": {
-            "description": "Project not found, or actor lacks venus access.",
+            "description": "Project not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -728,7 +728,7 @@
             }
           },
           "404": {
-            "description": "Branch not found, or actor lacks venus access.",
+            "description": "Branch not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -901,7 +901,7 @@
             }
           },
           "404": {
-            "description": "Branch not found, or actor lacks venus access.",
+            "description": "Branch not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1043,7 +1043,7 @@
             }
           },
           "404": {
-            "description": "Branch not found, or actor lacks venus access.",
+            "description": "Branch not found.",
             "content": {
               "application/json": {
                 "schema": {
