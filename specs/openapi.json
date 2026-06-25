@@ -79,6 +79,3326 @@
     "schemas": {}
   },
   "paths": {
+    "/v1/apps": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returns the list of apps.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "const": "app"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "region": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          },
+                          "projectId": {
+                            "type": "string"
+                          },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "latestDeploymentId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "appEndpointDomain": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "url",
+                          "name",
+                          "region",
+                          "projectId",
+                          "branchId",
+                          "latestDeploymentId",
+                          "appEndpointDomain",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Next cursor to continue pagination"
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "description": "Whether there are more items to paginate"
+                        }
+                      },
+                      "required": [
+                        "nextCursor",
+                        "hasMore"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. malformed projectId filter).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1Apps",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Cursor for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 100,
+              "description": "Limit for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "projectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchId",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "unassigned"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                }
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchGitName",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "summary": "List apps",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all apps the token has access to, ordered by creation time (oldest first). Optionally filter by project ID. Supports cursor-based pagination.",
+        "x-prisma-stability": "experimental"
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "App created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "app"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "latestDeploymentId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "appEndpointDomain": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "name",
+                        "region",
+                        "projectId",
+                        "branchId",
+                        "latestDeploymentId",
+                        "appEndpointDomain",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "An app with the same `displayName` already exists on the resolved branch. The body includes the existing app's id, name, and branch git name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "const": "app:already_exists"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "existingAppId": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "branchGitName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "existingAppId",
+                        "name",
+                        "branchGitName"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. missing projectId, empty display name, or invalid region).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1Apps",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [],
+        "summary": "Create app",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new app under the specified project. The `projectId` is required in the request body. The app is placed in the given region (or the default region if omitted). Returns `409 Conflict` with the existing app's id, name, and branch if an app with the same name already exists on the resolved branch.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "regionId": {
+                    "type": "string",
+                    "enum": [
+                      "us-east-1",
+                      "us-west-1",
+                      "eu-west-3",
+                      "eu-central-1",
+                      "ap-northeast-1",
+                      "ap-southeast-1"
+                    ],
+                    "default": "us-east-1"
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  }
+                },
+                "required": [
+                  "displayName",
+                  "projectId"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "App retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "app"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "latestDeploymentId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "appEndpointDomain": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "name",
+                        "region",
+                        "projectId",
+                        "branchId",
+                        "latestDeploymentId",
+                        "appEndpointDomain",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1AppsByAppId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get app",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns an app by ID, including its region and active promoted deployment reference.",
+        "x-prisma-stability": "experimental"
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "App updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "app"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        },
+                        "projectId": {
+                          "type": "string"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "latestDeploymentId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "appEndpointDomain": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "name",
+                        "region",
+                        "projectId",
+                        "branchId",
+                        "latestDeploymentId",
+                        "appEndpointDomain",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. empty display name).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "patchV1AppsByAppId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Update app",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nUpdates the display name of an app.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "displayName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "branchId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "branchGitName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "App deleted."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A deployment could not be deleted, or a concurrent deployment was created while deleting the app.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "deleteV1AppsByAppId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Delete app",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nDeletes an app. Deployments under the app are deleted before the app is deleted.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/apps/{appId}/promote": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Deployment promoted to app endpoint. The `reassignedDomains` field indicates how many custom domains were moved from the previously-promoted deployment to the new one.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "appEndpointDomain": {
+                          "type": "string"
+                        },
+                        "reassignedDomains": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "appEndpointDomain",
+                        "reassignedDomains"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App or deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment is not running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. malformed app ID or missing deployment ID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1AppsByAppIdPromote",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Promote deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a deployment to be the active deployment behind the app's stable endpoint. The deployment must be running. Returns the app endpoint domain.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deploymentId": {
+                    "type": "string",
+                    "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "versionId": {
+                    "type": "string",
+                    "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "deprecated": true,
+                    "description": "Deprecated: use `deploymentId` instead. Ignored when `deploymentId` is also present."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/rollback": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Deployment made live behind the app endpoint. The `reassignedDomains` field indicates how many custom domains were moved from the previously-live deployment to the new one.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "appEndpointDomain": {
+                          "type": "string"
+                        },
+                        "reassignedDomains": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "appEndpointDomain",
+                        "reassignedDomains"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App or deployment not found, or the deployment's Foundry artifact no longer exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment cannot be made live (e.g. it has no runnable artifact or is mid-teardown and cannot reach a running state).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. malformed app ID or missing deployment ID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1AppsByAppIdRollback",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Roll an app back to an existing deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nMakes any eligible existing deployment live behind the app's stable endpoint (rollback or roll-forward). Unlike promote, a stopped target is started and waited until it is running before the endpoint is switched, so the currently-live deployment keeps serving with zero downtime. Returns the app endpoint domain.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deploymentId": {
+                    "type": "string",
+                    "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "versionId": {
+                    "type": "string",
+                    "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "deprecated": true,
+                    "description": "Deprecated: use `deploymentId` instead. Ignored when `deploymentId` is also present."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/domains": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "List of custom domains.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "const": "custom-domain"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "hostname": {
+                            "type": "string"
+                          },
+                          "computeServiceId": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "pending_dns",
+                              "verifying",
+                              "verified_routing_blocked",
+                              "provisioning_tls",
+                              "active",
+                              "failed",
+                              "removing"
+                            ]
+                          },
+                          "foundryStatus": {
+                            "type": "string"
+                          },
+                          "failureReason": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "failureCategory": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "enum": [
+                              "dns",
+                              "acme",
+                              "storage",
+                              "unknown",
+                              null
+                            ]
+                          },
+                          "certExpiresAt": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "dnsRecords": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "CNAME"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                },
+                                "ttl": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "name",
+                                "value",
+                                "ttl"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "url",
+                          "hostname",
+                          "computeServiceId",
+                          "status",
+                          "foundryStatus",
+                          "failureReason",
+                          "failureCategory",
+                          "certExpiresAt",
+                          "createdAt",
+                          "updatedAt",
+                          "dnsRecords"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "hasMore": {
+                          "type": "boolean",
+                          "const": false
+                        },
+                        "nextCursor": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "hasMore",
+                        "nextCursor"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1AppsByAppIdDomains",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "List custom domains for an app",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all custom domains attached to any deployment of the app. Domains are aggregated across all deployments since Foundry lists per deployment.",
+        "x-prisma-stability": "experimental"
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Custom domain already registered on this app.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "custom-domain"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "hostname": {
+                          "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "pending_dns",
+                            "verifying",
+                            "verified_routing_blocked",
+                            "provisioning_tls",
+                            "active",
+                            "failed",
+                            "removing"
+                          ]
+                        },
+                        "foundryStatus": {
+                          "type": "string"
+                        },
+                        "failureReason": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failureCategory": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "dns",
+                            "acme",
+                            "storage",
+                            "unknown",
+                            null
+                          ]
+                        },
+                        "certExpiresAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "hostname",
+                        "computeServiceId",
+                        "status",
+                        "foundryStatus",
+                        "failureReason",
+                        "failureCategory",
+                        "certExpiresAt",
+                        "createdAt",
+                        "updatedAt",
+                        "dnsRecords"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Custom domain created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "custom-domain"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "hostname": {
+                          "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "pending_dns",
+                            "verifying",
+                            "verified_routing_blocked",
+                            "provisioning_tls",
+                            "active",
+                            "failed",
+                            "removing"
+                          ]
+                        },
+                        "foundryStatus": {
+                          "type": "string"
+                        },
+                        "failureReason": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failureCategory": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "dns",
+                            "acme",
+                            "storage",
+                            "unknown",
+                            null
+                          ]
+                        },
+                        "certExpiresAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dnsRecords": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "CNAME"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "ttl": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "name",
+                              "value",
+                              "ttl"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "hostname",
+                        "computeServiceId",
+                        "status",
+                        "foundryStatus",
+                        "failureReason",
+                        "failureCategory",
+                        "certExpiresAt",
+                        "createdAt",
+                        "updatedAt",
+                        "dnsRecords"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid hostname or DNS verification failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Hostname already registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "App has no promoted deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Domain quota exceeded or rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1AppsByAppIdDomains",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Create a custom domain",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRegisters a custom hostname for the app. The hostname must CNAME to the regional switchboard target before DNS verification can succeed. Returns 429 if the app has reached its domain quota (default: 3).",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hostname": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)*[a-z]{2,}$",
+                    "minLength": 1,
+                    "maxLength": 253
+                  }
+                },
+                "required": [
+                  "hostname"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/apps/{appId}/deployments": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returns the list of deployments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "const": "deployment"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "foundryVersionId": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "url",
+                          "foundryVersionId",
+                          "createdAt"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Next cursor to continue pagination"
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "description": "Whether there are more items to paginate"
+                        }
+                      },
+                      "required": [
+                        "nextCursor",
+                        "hasMore"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1AppsByAppIdDeployments",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Cursor for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 100,
+              "description": "Limit for pagination"
+            }
+          }
+        ],
+        "summary": "List deployments",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all deployments belonging to an app, ordered by creation time (newest first). Supports cursor-based pagination.",
+        "x-prisma-stability": "experimental"
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Deployment created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "deployment"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "foundryVersionId": {
+                          "type": "string"
+                        },
+                        "uploadUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "foundryVersionId",
+                        "uploadUrl"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "App not found, or the app's attached Branch has been deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed (e.g. `skipCodeUpload` without an active promoted deployment, or the app is not attached to a Branch — env-var resolution requires a Branch).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error while resolving the deploy-time env vars (e.g., a master-key rotation or storage corruption prevents the project's wrapped DEK or a per-value envelope from being decrypted). Not a client-fixable condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1AppsByAppIdDeployments",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Create deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new deployment under the specified app. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the active promoted deployment's artifact). Environment variables are resolved automatically from the app's attached Branch (production-class templates for the production Branch; preview-class templates for preview Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "portMapping": {
+                    "type": "object",
+                    "properties": {
+                      "http": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "skipCodeUpload": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/projects/{projectId}/branches": {
       "post": {
         "responses": {
@@ -1379,6 +4699,7 @@
         ],
         "summary": "Stream compute version logs via WebSocket",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nUpgrades to a WebSocket connection that streams log output for the specified compute version. Each message is a JSON object with `type: \"log\"` (log text + byte metadata) or `type: \"terminal\"` (end-of-segment signal with reconnect cursor). The stream ends after 10 minutes; reconnect with the `cursor` query parameter to continue.",
+        "deprecated": true,
         "x-prisma-stability": "experimental"
       }
     },
@@ -1683,6 +5004,7 @@
             }
           }
         ],
+        "deprecated": true,
         "summary": "List compute services",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all compute services the token has access to, ordered by creation time (oldest first). Optionally filter by project ID. Supports cursor-based pagination.",
         "x-prisma-stability": "experimental"
@@ -1986,6 +5308,7 @@
           "[Experimental]"
         ],
         "parameters": [],
+        "deprecated": true,
         "summary": "Create compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute service under the specified project. The `projectId` is required in the request body. The service is placed in the given region (or the default region if omitted). Returns `409 Conflict` with the existing service's id, name, and branch if a service with the same name already exists on the resolved branch.",
         "x-prisma-stability": "experimental",
@@ -2265,6 +5588,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Get compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a compute version by ID, including its current status derived from the underlying VM state.",
         "x-prisma-stability": "experimental"
@@ -2455,6 +5779,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Delete compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPermanently deletes the compute version, its metadata, and any associated VM. The version must be stopped or in the `new` state before it can be deleted.",
         "x-prisma-stability": "experimental"
@@ -2670,6 +5995,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Start compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM creation and startup for the compute version. The artifact must be uploaded before calling this endpoint. Returns a preview domain that becomes reachable once the VM is running. Poll the status endpoint until `running` is reached.",
         "x-prisma-stability": "experimental"
@@ -2862,6 +6188,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Stop compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM shutdown for the compute version. The version record and metadata are retained. Poll the status endpoint until `stopped` is reached.",
         "x-prisma-stability": "experimental"
@@ -3101,6 +6428,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Get compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a compute service by ID, including its region and active promoted version reference.",
         "x-prisma-stability": "experimental"
@@ -3371,6 +6699,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Update compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nUpdates the display name of a compute service.",
         "x-prisma-stability": "experimental",
@@ -3591,6 +6920,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Delete compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nDeletes a compute service. Compute versions under the service are deleted before the service is deleted.",
         "x-prisma-stability": "experimental"
@@ -3843,6 +7173,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Promote compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPromotes a compute version to be the active version behind the service's stable endpoint. The version must be running. Returns the service endpoint domain.",
         "x-prisma-stability": "experimental",
@@ -4113,6 +7444,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Roll a compute service back to an existing version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nMakes any eligible existing compute version live behind the service's stable endpoint (rollback or roll-forward). Unlike promote, a stopped target is started and waited until it is running before the endpoint is switched, so the currently-live version keeps serving with zero downtime. Returns the service endpoint domain.",
         "x-prisma-stability": "experimental",
@@ -4376,6 +7708,7 @@
             }
           }
         ],
+        "deprecated": true,
         "summary": "List compute versions",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all compute versions belonging to a compute service, ordered by creation time (newest first). Supports cursor-based pagination.",
         "x-prisma-stability": "experimental"
@@ -4643,6 +7976,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Create compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set (which forks the active promoted version's artifact). Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates for preview Branches). Manage env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
@@ -4982,6 +8316,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "List custom domains for a compute service",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all custom domains attached to any version of the compute service. Domains are aggregated across all versions since Foundry lists per version.",
         "x-prisma-stability": "experimental"
@@ -5497,6 +8832,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Create a custom domain",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRegisters a custom hostname for the compute service. The hostname must CNAME to the regional switchboard target before DNS verification can succeed. Returns 429 if the service has reached its domain quota (default: 3).",
         "x-prisma-stability": "experimental",
@@ -11002,6 +14338,1052 @@
         ],
         "summary": "Get database usage metrics",
         "description": "Returns usage metrics for the specified database."
+      }
+    },
+    "/v1/deployments/{deploymentId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Deployment retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "deployment"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "foundryVersionId": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "previewDomain": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "envVars": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "description": "Always \"[redacted]\". Compute version inspection endpoints expose env var names only; values are never returned.",
+                            "example": "[redacted]"
+                          },
+                          "description": "Environment variable names present on this compute version. Values are always redacted as \"[redacted]\" and must not be treated as deployed secret values."
+                        },
+                        "portMapping": {
+                          "type": "object",
+                          "properties": {
+                            "http": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "url",
+                        "foundryVersionId",
+                        "status",
+                        "previewDomain",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1DeploymentsByDeploymentId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deploymentId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a deployment by ID, including its current status derived from the underlying VM state.",
+        "x-prisma-stability": "experimental"
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Deployment deleted."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment must be stopped before it can be deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "deleteV1DeploymentsByDeploymentId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deploymentId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Delete deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPermanently deletes the deployment, its metadata, and any associated VM. The deployment must be stopped or in the `new` state before it can be deleted.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/deployments/{deploymentId}/start": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Start request accepted. The preview domain is returned immediately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "previewDomain": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "previewDomain"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment is in a state that does not allow starting (e.g. artifact not uploaded, or already running).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1DeploymentsByDeploymentIdStart",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deploymentId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Start deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM creation and startup for the deployment. The artifact must be uploaded before calling this endpoint. Returns a preview domain that becomes reachable once the VM is running. Poll the status endpoint until `running` is reached.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/deployments/{deploymentId}/stop": {
+      "post": {
+        "responses": {
+          "204": {
+            "description": "Stop request accepted."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The deployment must be running or provisioning to be stopped.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1DeploymentsByDeploymentIdStop",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deploymentId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Stop deployment",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM shutdown for the deployment. The deployment record and metadata are retained. Poll the status endpoint until `stopped` is reached.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/deployments/{deploymentId}/logs": {
+      "get": {
+        "responses": {
+          "101": {
+            "description": "WebSocket connection established. Each message is a JSON object discriminated by `type`."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "426": {
+            "description": "Request must be a WebSocket upgrade.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1DeploymentsByDeploymentIdLogs",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deploymentId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(cpv_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "tail",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "from_start",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          }
+        ],
+        "summary": "Stream deployment logs via WebSocket",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nUpgrades to a WebSocket connection that streams log output for the specified deployment. Each message is a JSON object with `type: \"log\"` (log text + byte metadata) or `type: \"terminal\"` (end-of-segment signal with reconnect cursor). The stream ends after 10 minutes; reconnect with the `cursor` query parameter to continue.",
+        "x-prisma-stability": "experimental"
       }
     },
     "/v1/projects": {
@@ -18201,6 +22583,7 @@
             }
           }
         ],
+        "deprecated": true,
         "summary": "List compute versions",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns all compute versions the token has access to, ordered by creation time (newest first). Optionally filter by compute service ID. Supports cursor-based pagination.",
         "x-prisma-stability": "experimental"
@@ -18458,6 +22841,7 @@
           "[Experimental]"
         ],
         "parameters": [],
+        "deprecated": true,
         "summary": "Create compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nCreates a new compute version under the specified compute service. The `computeServiceId` is required in the request body. Returns a pre-signed upload URL for the artifact unless `skipCodeUpload` is set, in which case the active promoted version's artifact is forked. Environment variables are resolved automatically from the service's attached Branch (production-class templates for the production Branch; preview-class templates merged with branch overrides for preview Branches) — clients write env vars via the `/v1/environment-variables` endpoints, not as part of the deploy payload.",
         "x-prisma-stability": "experimental",
@@ -18726,6 +23110,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Get compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns a compute version by ID, including its current status derived from the underlying VM state.",
         "x-prisma-stability": "experimental"
@@ -18916,6 +23301,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Delete compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nPermanently deletes the compute version, its metadata, and any associated VM. The version must be stopped or in the `new` state before it can be deleted.",
         "x-prisma-stability": "experimental"
@@ -19131,6 +23517,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Start compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM creation and startup for the compute version. The artifact must be uploaded before calling this endpoint. Returns a preview domain that becomes reachable once the VM is running. Poll the status endpoint until `running` is reached.",
         "x-prisma-stability": "experimental"
@@ -19323,6 +23710,7 @@
             "required": true
           }
         ],
+        "deprecated": true,
         "summary": "Stop compute version",
         "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRequests VM shutdown for the compute version. The version record and metadata are retained. Poll the status endpoint until `stopped` is reached.",
         "x-prisma-stability": "experimental"
