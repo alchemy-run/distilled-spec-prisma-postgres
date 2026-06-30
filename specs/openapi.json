@@ -2042,8 +2042,13 @@
                           "hostname": {
                             "type": "string"
                           },
-                          "computeServiceId": {
+                          "appId": {
                             "type": "string"
+                          },
+                          "computeServiceId": {
+                            "type": "string",
+                            "deprecated": true,
+                            "description": "Deprecated: use `appId` instead."
                           },
                           "status": {
                             "type": "string",
@@ -2130,6 +2135,7 @@
                           "type",
                           "url",
                           "hostname",
+                          "appId",
                           "computeServiceId",
                           "status",
                           "foundryStatus",
@@ -2345,8 +2351,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -2433,6 +2444,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -2476,8 +2488,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -2564,6 +2581,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -4482,6 +4500,237 @@
         "x-prisma-stability": "experimental"
       }
     },
+    "/v1/builds/{buildId}/logs": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Build log stream (newline-delimited JSON; one `BuildLogNdjsonLine` per line).",
+            "content": {
+              "application/x-ndjson": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "log"
+                        },
+                        "text": {
+                          "type": "string"
+                        },
+                        "level": {
+                          "type": "string",
+                          "enum": [
+                            "info",
+                            "error"
+                          ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "runner",
+                            "stdout",
+                            "stderr"
+                          ]
+                        },
+                        "step": {
+                          "type": "string"
+                        },
+                        "cursor": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "text",
+                        "level",
+                        "source",
+                        "cursor"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "terminal"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "end",
+                            "error"
+                          ]
+                        },
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "retryable": {
+                          "type": "boolean"
+                        },
+                        "cursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "kind",
+                        "code",
+                        "message",
+                        "retryable",
+                        "cursor"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1BuildsByBuildIdLogs",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buildId",
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "follow",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Stream build logs",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nStreams the full build log for a build as newline-delimited JSON (`application/x-ndjson`). Each line is a JSON object discriminated by `type`: `log` (a build output line) or `terminal` (end-of-stream marker with a `cursor` for resumption). The default is a finite dump that ends once the stream is drained; pass `follow=true` to keep the connection open for an in-flight build, and `cursor` to resume from a prior terminal cursor.",
+        "x-prisma-stability": "experimental"
+      }
+    },
     "/v1/compute-services/versions/{versionId}/logs": {
       "get": {
         "responses": {
@@ -5698,7 +5947,7 @@
             }
           },
           "409": {
-            "description": "The compute version must be stopped before it can be deleted.",
+            "description": "The deployment must be stopped before it can be deleted.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8043,8 +8292,13 @@
                           "hostname": {
                             "type": "string"
                           },
-                          "computeServiceId": {
+                          "appId": {
                             "type": "string"
+                          },
+                          "computeServiceId": {
+                            "type": "string",
+                            "deprecated": true,
+                            "description": "Deprecated: use `appId` instead."
                           },
                           "status": {
                             "type": "string",
@@ -8131,6 +8385,7 @@
                           "type",
                           "url",
                           "hostname",
+                          "appId",
                           "computeServiceId",
                           "status",
                           "foundryStatus",
@@ -8347,8 +8602,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -8435,6 +8695,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -8478,8 +8739,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -8566,6 +8832,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -8885,8 +9152,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -8973,6 +9245,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -9329,8 +9602,13 @@
                         "hostname": {
                           "type": "string"
                         },
-                        "computeServiceId": {
+                        "appId": {
                           "type": "string"
+                        },
+                        "computeServiceId": {
+                          "type": "string",
+                          "deprecated": true,
+                          "description": "Deprecated: use `appId` instead."
                         },
                         "status": {
                           "type": "string",
@@ -9417,6 +9695,7 @@
                         "type",
                         "url",
                         "hostname",
+                        "appId",
                         "computeServiceId",
                         "status",
                         "foundryStatus",
@@ -23220,7 +23499,7 @@
             }
           },
           "409": {
-            "description": "The compute version must be stopped before it can be deleted.",
+            "description": "The deployment must be stopped before it can be deleted.",
             "content": {
               "application/json": {
                 "schema": {
