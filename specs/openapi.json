@@ -5232,7 +5232,7 @@
           }
         ],
         "summary": "Delete bucket",
-        "description": "Deletes the bucket with the given ID and all its keys."
+        "description": "Permanently deletes the bucket with the given ID, all objects stored in it, and all its access keys. This action cannot be undone."
       }
     },
     "/v1/buckets/{bucketId}/keys": {
