@@ -10538,7 +10538,8 @@
                             "type": "string",
                             "enum": [
                               "full",
-                              "incremental"
+                              "incremental",
+                              "differential"
                             ],
                             "description": "Type of backup"
                           },
@@ -10548,7 +10549,7 @@
                           },
                           "size": {
                             "type": "number",
-                            "description": "Total file size (in bytes) of gzipped backup files"
+                            "description": "Total file size (in MiB) of gzipped backup files"
                           },
                           "status": {
                             "type": "string",
@@ -19106,6 +19107,130 @@
         ],
         "summary": "Get workspace",
         "description": "Returns the workspace with the given ID."
+      }
+    },
+    "/v1/workspaces/{id}/subscription": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Workspace subscription retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "planName": {
+                          "type": "string"
+                        },
+                        "usageBlocked": {
+                          "type": "boolean"
+                        },
+                        "upgradeUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": [
+                        "planName",
+                        "usageBlocked",
+                        "upgradeUrl"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace with the specified ID was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1WorkspacesByIdSubscription",
+        "tags": [
+          "Workspaces"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "pattern": "^(wksp_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get workspace subscription",
+        "description": "Returns subscription information for the workspace with the given ID."
       }
     }
   }
