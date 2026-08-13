@@ -5743,6 +5743,1653 @@
         "description": "Revokes and deletes the bucket key with the given ID."
       }
     },
+    "/v1/builds": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "The build. Returned whether this call created it or an earlier report of the same run did.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(bld_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "webhook",
+                            "setup",
+                            "manual",
+                            "ci",
+                            "cli"
+                          ]
+                        },
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "pending",
+                            "running",
+                            "succeeded",
+                            "failed",
+                            "cancelled"
+                          ]
+                        },
+                        "phase": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "queued",
+                            "build",
+                            "deploy",
+                            null
+                          ],
+                          "description": "Null when nothing reported a phase; the platform never invents an observation it did not receive."
+                        },
+                        "commitSha": {
+                          "type": "string"
+                        },
+                        "branchName": {
+                          "type": "string"
+                        },
+                        "gitRepoId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Repository the build ran against. Set only when the workspace has a live link to it; a reported repository the platform does not know stays null."
+                        },
+                        "projectId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(proj_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "appId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "externalLogUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "deployedUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "errorMessage": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failingStep": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "startedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "finishedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "source",
+                        "state",
+                        "phase",
+                        "commitSha",
+                        "branchName",
+                        "gitRepoId",
+                        "projectId",
+                        "branchId",
+                        "appId",
+                        "externalLogUrl",
+                        "deployedUrl",
+                        "errorMessage",
+                        "failingStep",
+                        "createdAt",
+                        "startedAt",
+                        "finishedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds this endpoint's size cap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "postV1Builds",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [],
+        "summary": "Report a build",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRecords a build any deploy tool is running — a CI workflow, a deploy script, or Composer from a laptop. The workspace comes from the token, never from the body, which is what lets a build be reported before the project it will create exists. Supplying `runIdentity` makes the call idempotent: a repeat for the same run returns the build already recorded rather than a second one. The response is the same either way; a caller cannot tell whether it created the build or joined one.\n\nA build reported with no `runIdentity` has no dedup key, so a client that retries a lost response creates a second build. Supply a `runIdentity` whenever the run has one.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "ci",
+                      "cli"
+                    ],
+                    "description": "`ci` for a build reported from a CI run, `cli` for a deploy run directly by a human or agent."
+                  },
+                  "commitSha": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "description": "Commit the build ran on."
+                  },
+                  "branchName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Git branch name."
+                  },
+                  "runIdentity": {
+                    "type": "object",
+                    "properties": {
+                      "provider": {
+                        "type": "string",
+                        "const": "github",
+                        "description": "CI provider the run identity belongs to."
+                      },
+                      "repositoryId": {
+                        "type": "string",
+                        "pattern": "^[0-9]+$",
+                        "maxLength": 20,
+                        "description": "Provider's repository id (for GitHub, the numeric repo id)."
+                      },
+                      "runId": {
+                        "type": "string",
+                        "pattern": "^[0-9]+$",
+                        "maxLength": 20,
+                        "description": "Provider's workflow-run id."
+                      },
+                      "runAttempt": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "description": "Attempt number of the run; a re-run is a separate build."
+                      }
+                    },
+                    "required": [
+                      "provider",
+                      "repositoryId",
+                      "runId",
+                      "runAttempt"
+                    ],
+                    "description": "Identifies the CI run. Supplying it makes creation idempotent — a repeat call for the same run returns the build that already exists. Omit it for builds with no run to name, such as a deploy from a laptop, where every call creates a new build."
+                  },
+                  "externalLogUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2000,
+                    "description": "Link to the run's logs in the reporter's own system."
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "Project the build targets, when it exists. A build may be reported before its project does."
+                  },
+                  "branchId": {
+                    "type": "string",
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  },
+                  "appId": {
+                    "type": "string",
+                    "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                  }
+                },
+                "required": [
+                  "source",
+                  "commitSha",
+                  "branchName"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Builds, newest first.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "pattern": "^(bld_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": [
+                              "webhook",
+                              "setup",
+                              "manual",
+                              "ci",
+                              "cli"
+                            ]
+                          },
+                          "state": {
+                            "type": "string",
+                            "enum": [
+                              "pending",
+                              "running",
+                              "succeeded",
+                              "failed",
+                              "cancelled"
+                            ]
+                          },
+                          "phase": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "enum": [
+                              "queued",
+                              "build",
+                              "deploy",
+                              null
+                            ],
+                            "description": "Null when nothing reported a phase; the platform never invents an observation it did not receive."
+                          },
+                          "commitSha": {
+                            "type": "string"
+                          },
+                          "branchName": {
+                            "type": "string"
+                          },
+                          "gitRepoId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "Repository the build ran against. Set only when the workspace has a live link to it; a reported repository the platform does not know stays null."
+                          },
+                          "projectId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "pattern": "^(proj_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "branchId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "appId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                          },
+                          "externalLogUrl": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "deployedUrl": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "errorMessage": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "failingStep": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "startedAt": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "finishedAt": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "source",
+                          "state",
+                          "phase",
+                          "commitSha",
+                          "branchName",
+                          "gitRepoId",
+                          "projectId",
+                          "branchId",
+                          "appId",
+                          "externalLogUrl",
+                          "deployedUrl",
+                          "errorMessage",
+                          "failingStep",
+                          "createdAt",
+                          "startedAt",
+                          "finishedAt"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "nextCursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Next cursor to continue pagination"
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "description": "Whether there are more items to paginate"
+                        }
+                      },
+                      "required": [
+                        "nextCursor",
+                        "hasMore"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1Builds",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Cursor for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 100,
+              "description": "Limit for pagination"
+            }
+          },
+          {
+            "in": "query",
+            "name": "projectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "running",
+                "succeeded",
+                "failed",
+                "cancelled"
+              ]
+            }
+          }
+        ],
+        "summary": "List builds",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nLists the builds of the caller's workspace, newest first, filtered by project, branch, or state. `cursor` is opaque: pass back the `nextCursor` the previous page returned.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/builds/{buildId}": {
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "The updated build.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(bld_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "webhook",
+                            "setup",
+                            "manual",
+                            "ci",
+                            "cli"
+                          ]
+                        },
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "pending",
+                            "running",
+                            "succeeded",
+                            "failed",
+                            "cancelled"
+                          ]
+                        },
+                        "phase": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "queued",
+                            "build",
+                            "deploy",
+                            null
+                          ],
+                          "description": "Null when nothing reported a phase; the platform never invents an observation it did not receive."
+                        },
+                        "commitSha": {
+                          "type": "string"
+                        },
+                        "branchName": {
+                          "type": "string"
+                        },
+                        "gitRepoId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Repository the build ran against. Set only when the workspace has a live link to it; a reported repository the platform does not know stays null."
+                        },
+                        "projectId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(proj_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "appId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "externalLogUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "deployedUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "errorMessage": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failingStep": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "startedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "finishedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "source",
+                        "state",
+                        "phase",
+                        "commitSha",
+                        "branchName",
+                        "gitRepoId",
+                        "projectId",
+                        "branchId",
+                        "appId",
+                        "externalLogUrl",
+                        "deployedUrl",
+                        "errorMessage",
+                        "failingStep",
+                        "createdAt",
+                        "startedAt",
+                        "finishedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A fill-only field already holds a different value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds this endpoint's size cap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "patchV1BuildsByBuildId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buildId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(bld_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Update a build",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRecords progress on a build. Any holder of the workspace token may patch any field — the webhook, the CI run and Composer each report the part of a deploy they can see, and the token is the boundary. Reaching `running` stamps `startedAt` and reaching a terminal state stamps `finishedAt`, both only if unset, so re-reporting the same state does not move the clock.\n\n`projectId`, `branchId`, `appId` and `deployedUrl` are fill-only: a reporter that resolves them partway through a deploy sets them here, but a value already recorded cannot be changed and the attempt is a conflict. Sending the value already recorded is accepted and changes nothing. An anchor must belong to the caller's workspace and agree with the anchors the build already carries, so an app from another project is refused.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phase": {
+                    "type": "string",
+                    "enum": [
+                      "queued",
+                      "build",
+                      "deploy"
+                    ],
+                    "description": "How far the run has got."
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "running",
+                      "succeeded",
+                      "failed",
+                      "cancelled"
+                    ]
+                  },
+                  "failingStep": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Name of the step that failed, free text — step names come from build tooling the platform cannot validate."
+                  },
+                  "errorMessage": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "externalLogUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2000
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "pattern": "^(proj_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "Project the build targets. Fill-only: a reporter that learns the project partway through a deploy may set it, but a value already recorded cannot be changed."
+                  },
+                  "branchId": {
+                    "type": "string",
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "Branch the build targets. Fill-only, like `projectId`."
+                  },
+                  "appId": {
+                    "type": "string",
+                    "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "App the build deployed to. Fill-only, like `projectId`. Recording it does not report the app as a resource the build acted on — use the resources endpoint for that."
+                  },
+                  "deployedUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2000,
+                    "description": "Where the deployed app can be reached. Fill-only, like the anchors."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The build, with its reported resources.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^(bld_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "webhook",
+                            "setup",
+                            "manual",
+                            "ci",
+                            "cli"
+                          ]
+                        },
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "pending",
+                            "running",
+                            "succeeded",
+                            "failed",
+                            "cancelled"
+                          ]
+                        },
+                        "phase": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "queued",
+                            "build",
+                            "deploy",
+                            null
+                          ],
+                          "description": "Null when nothing reported a phase; the platform never invents an observation it did not receive."
+                        },
+                        "commitSha": {
+                          "type": "string"
+                        },
+                        "branchName": {
+                          "type": "string"
+                        },
+                        "gitRepoId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Repository the build ran against. Set only when the workspace has a live link to it; a reported repository the platform does not know stays null."
+                        },
+                        "projectId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(proj_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "branchId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "appId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                        },
+                        "externalLogUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "deployedUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "errorMessage": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "failingStep": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "startedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "finishedAt": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "resources": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "resourceType": {
+                                "type": "string",
+                                "enum": [
+                                  "project",
+                                  "branch",
+                                  "database",
+                                  "app",
+                                  "deployment",
+                                  "bucket",
+                                  "service_key",
+                                  "config_variable"
+                                ]
+                              },
+                              "resourceId": {
+                                "type": "string",
+                                "description": "Prefixed id of the reported resource."
+                              },
+                              "action": {
+                                "type": "string",
+                                "enum": [
+                                  "created",
+                                  "acted_on",
+                                  "deleted"
+                                ]
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "resourceType",
+                              "resourceId",
+                              "action",
+                              "createdAt"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "source",
+                        "state",
+                        "phase",
+                        "commitSha",
+                        "branchName",
+                        "gitRepoId",
+                        "projectId",
+                        "branchId",
+                        "appId",
+                        "externalLogUrl",
+                        "deployedUrl",
+                        "errorMessage",
+                        "failingStep",
+                        "createdAt",
+                        "startedAt",
+                        "finishedAt",
+                        "resources"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getV1BuildsByBuildId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buildId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(bld_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Get a build",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nReturns one build with the resources it reported acting on.",
+        "x-prisma-stability": "experimental"
+      }
+    },
+    "/v1/builds/{buildId}/resources/{resourceType}/{resourceId}": {
+      "put": {
+        "responses": {
+          "204": {
+            "description": "Recorded."
+          },
+          "401": {
+            "description": "Missing or invalid authorization token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Build or resource not found, or the caller's workspace does not own it (indistinguishable).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds this endpoint's size cap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "putV1BuildsByBuildIdResourcesByResourceTypeByResourceId",
+        "tags": [
+          "[Experimental]"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "buildId",
+            "schema": {
+              "type": "string",
+              "pattern": "^(bld_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "resourceType",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "project",
+                "branch",
+                "database",
+                "app",
+                "deployment",
+                "bucket",
+                "service_key",
+                "config_variable"
+              ]
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "resourceId",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "required": true
+          }
+        ],
+        "summary": "Report a resource a build acted on",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRecords that the build created, acted on, or deleted a platform resource — the provenance a deploy run leaves behind. Idempotent: re-reporting the same resource updates the row rather than adding one, and never weakens the recorded action. The resource must belong to the caller's workspace, and must still be findable: a soft-deleted resource can be reported, but `project`, `database`, `service_key` and `config_variable` leave no row behind, so a build that deletes one must report it before deleting it. Reporting a deployment as `created` also attaches the deployment to the build and records the app it deployed into, both in the same transaction, because a deployment relates its build to that app whether or not the reporter says so.",
+        "x-prisma-stability": "experimental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "created",
+                      "acted_on",
+                      "deleted"
+                    ],
+                    "description": "The strongest effect the build had on the resource. Re-reporting is safe: a weaker action never overwrites a stronger one, so `created` survives a later `acted_on`."
+                  }
+                },
+                "required": [
+                  "action"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/builds/{buildId}/logs": {
       "get": {
         "responses": {
