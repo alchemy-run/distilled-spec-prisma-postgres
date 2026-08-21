@@ -5820,13 +5820,6 @@
                           ],
                           "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
                         },
-                        "appId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
-                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
-                        },
                         "externalLogUrl": {
                           "type": [
                             "string",
@@ -5877,7 +5870,6 @@
                         "gitRepoId",
                         "projectId",
                         "branchId",
-                        "appId",
                         "externalLogUrl",
                         "deployedUrl",
                         "errorMessage",
@@ -6110,10 +6102,6 @@
                   "branchId": {
                     "type": "string",
                     "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
-                  },
-                  "appId": {
-                    "type": "string",
-                    "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
                   }
                 },
                 "required": [
@@ -6204,13 +6192,6 @@
                             ],
                             "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
                           },
-                          "appId": {
-                            "type": [
-                              "string",
-                              "null"
-                            ],
-                            "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
-                          },
                           "externalLogUrl": {
                             "type": [
                               "string",
@@ -6261,7 +6242,6 @@
                           "gitRepoId",
                           "projectId",
                           "branchId",
-                          "appId",
                           "externalLogUrl",
                           "deployedUrl",
                           "errorMessage",
@@ -6539,13 +6519,6 @@
                           ],
                           "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
                         },
-                        "appId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
-                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
-                        },
                         "externalLogUrl": {
                           "type": [
                             "string",
@@ -6596,7 +6569,6 @@
                         "gitRepoId",
                         "projectId",
                         "branchId",
-                        "appId",
                         "externalLogUrl",
                         "deployedUrl",
                         "errorMessage",
@@ -6796,7 +6768,7 @@
           }
         ],
         "summary": "Update a build",
-        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRecords progress on a build. Any holder of the workspace token may patch any field — the webhook, the CI run and Composer each report the part of a deploy they can see, and the token is the boundary. Reaching `running` stamps `startedAt` and reaching a terminal state stamps `finishedAt`, both only if unset, so re-reporting the same state does not move the clock.\n\n`projectId`, `branchId`, `appId` and `deployedUrl` are fill-only: a reporter that resolves them partway through a deploy sets them here, but a value already recorded cannot be changed and the attempt is a conflict. Sending the value already recorded is accepted and changes nothing. An anchor must belong to the caller's workspace and agree with the anchors the build already carries, so an app from another project is refused.",
+        "description": "⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️\n\nRecords progress on a build. Any holder of the workspace token may patch any field — the webhook, the CI run and Composer each report the part of a deploy they can see, and the token is the boundary. Reaching `running` stamps `startedAt` and reaching a terminal state stamps `finishedAt`, both only if unset, so re-reporting the same state does not move the clock.\n\n`projectId`, `branchId` and `deployedUrl` are fill-only: a reporter that resolves them partway through a deploy sets them here, but a value already recorded cannot be changed and the attempt is a conflict. Sending the value already recorded is accepted and changes nothing. An anchor must belong to the caller's workspace and agree with the anchors the build already carries, so a branch from another project is refused.",
         "x-prisma-stability": "experimental",
         "requestBody": {
           "content": {
@@ -6848,11 +6820,6 @@
                     "type": "string",
                     "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
                     "description": "Branch the build targets. Fill-only, like `projectId`."
-                  },
-                  "appId": {
-                    "type": "string",
-                    "pattern": "^(cps_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
-                    "description": "App the build deployed to. Fill-only, like `projectId`. Recording it does not report the app as a resource the build acted on — use the resources endpoint for that."
                   },
                   "deployedUrl": {
                     "type": "string",
@@ -6941,13 +6908,6 @@
                             "null"
                           ],
                           "pattern": "^(br_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
-                        },
-                        "appId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
-                          "pattern": "^(cps_)([cC][^\\s-]{8,}|[a-z0-9]+)$"
                         },
                         "externalLogUrl": {
                           "type": [
@@ -7041,7 +7001,6 @@
                         "gitRepoId",
                         "projectId",
                         "branchId",
-                        "appId",
                         "externalLogUrl",
                         "deployedUrl",
                         "errorMessage",
@@ -15613,6 +15572,72 @@
           },
           "404": {
             "description": "Project with the given ID was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The project cannot be transferred in its current state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "hint": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request body exceeds this endpoint's size cap.",
             "content": {
               "application/json": {
                 "schema": {
