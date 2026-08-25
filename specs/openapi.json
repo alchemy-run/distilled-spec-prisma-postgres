@@ -1674,7 +1674,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded.",
+            "description": "Rate limit or Compute resource limit exceeded.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1948,7 +1948,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded.",
+            "description": "Rate limit or Compute resource limit exceeded.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5018,7 +5018,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded.",
+            "description": "Rate limit or Compute resource limit exceeded.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5291,7 +5291,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded.",
+            "description": "Rate limit or Compute resource limit exceeded.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17087,7 +17087,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded.",
+            "description": "Rate limit or Compute resource limit exceeded.",
             "content": {
               "application/json": {
                 "schema": {
