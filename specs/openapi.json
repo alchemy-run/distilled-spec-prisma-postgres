@@ -2911,6 +2911,9 @@
                             "type": "string",
                             "format": "uri"
                           },
+                          "serviceId": {
+                            "type": "string"
+                          },
                           "foundryVersionId": {
                             "type": "string"
                           },
@@ -2923,6 +2926,7 @@
                           "id",
                           "type",
                           "url",
+                          "serviceId",
                           "foundryVersionId",
                           "createdAt"
                         ]
@@ -6251,6 +6255,9 @@
                             "type": "string",
                             "format": "uri"
                           },
+                          "serviceId": {
+                            "type": "string"
+                          },
                           "foundryVersionId": {
                             "type": "string"
                           },
@@ -6263,6 +6270,7 @@
                           "id",
                           "type",
                           "url",
+                          "serviceId",
                           "foundryVersionId",
                           "createdAt"
                         ]
@@ -13928,14 +13936,16 @@
                       "string",
                       "null"
                     ],
-                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "ID of the Branch to attach the database to. Omit to attach the database to the project's default Branch. Every database belongs to a Branch, so null is rejected."
                   },
                   "branchGitName": {
                     "type": [
                       "string",
                       "null"
                     ],
-                    "minLength": 1
+                    "minLength": 1,
+                    "description": "Git name of the Branch to attach the database to; the Branch is created when it does not exist. Mutually exclusive with branchId. Omit to attach to the project's default Branch. Every database belongs to a Branch, so null is rejected."
                   }
                 },
                 "required": [
@@ -14823,14 +14833,16 @@
                       "string",
                       "null"
                     ],
-                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$"
+                    "pattern": "^(br_)?([cC][^\\s-]{8,}|[a-z0-9]+)$",
+                    "description": "ID of the Branch to move the database to. Every database belongs to a Branch, so null (detach) is rejected."
                   },
                   "branchGitName": {
                     "type": [
                       "string",
                       "null"
                     ],
-                    "minLength": 1
+                    "minLength": 1,
+                    "description": "Git name of the Branch to move the database to; the Branch is created when it does not exist. Mutually exclusive with branchId. Every database belongs to a Branch, so null (detach) is rejected."
                   }
                 }
               }
@@ -16530,6 +16542,9 @@
                           "type": "string",
                           "format": "uri"
                         },
+                        "serviceId": {
+                          "type": "string"
+                        },
                         "foundryVersionId": {
                           "type": "string"
                         },
@@ -16568,6 +16583,7 @@
                         "id",
                         "type",
                         "url",
+                        "serviceId",
                         "foundryVersionId",
                         "status",
                         "previewDomain",
